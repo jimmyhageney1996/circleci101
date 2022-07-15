@@ -6,9 +6,46 @@ jobs:
     steps:
       - checkout
       - run: echo "A first hello"
-  build:
+      - run: sleep 5
+      
+      
+  testa:
     docker:
       - image: cimg/ruby:3.0.2
     steps:
       - checkout
-      - run: echo "A first hello"  
+      - run: echo "A more familiar hi"
+      - run: sleep 5
+  testb:
+    docker:
+      - image: cimg/ruby:3.0.2
+    steps:
+      - checkout
+      - run: echo "A localized Salut"
+      - run: sleep 5
+      
+      
+  deploy:
+    docker:
+      - image: cimg/ruby:3.0.2
+    steps:
+      - checkout
+      - run: echo "A final goodbye"
+      - run: sleep 5
+      
+      
+workflows:
+  version: 2.1
+  build_and_test:
+    jobs:
+      - build
+      - testa:
+          requires:
+            - build 
+      - testb:
+          requires:
+            - build 
+      - deploy:
+          requires:
+            - testa
+            - testb
